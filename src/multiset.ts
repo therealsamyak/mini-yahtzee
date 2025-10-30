@@ -1,6 +1,6 @@
 import { NUM_DICE, NUM_REROLLS, calculateMultisetScore } from "./utils.js"
 import type { MultisetState } from "./utils.js"
-import { readFileSync, writeFileSync, existsSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync } from "fs"
 
 // Type definitions
 // For example: [2, 1, 0, 1, 1, 0] means two 1s, one 2, one 4, one 5
@@ -138,20 +138,25 @@ const calculateTransitionProbability = (
 // Policy cache management
 const POLICY_CACHE_FILE = `src/multiset-policy-${NUM_DICE}dice-${NUM_REROLLS}rerolls.json`
 
-const loadPolicyFromCache = (): Map<string, { value: number; action: Action }> | null => {
+const loadPolicyFromCache = (): Map<
+  string,
+  { value: number; action: Action }
+> | null => {
   if (existsSync(POLICY_CACHE_FILE)) {
     try {
-      const data = JSON.parse(readFileSync(POLICY_CACHE_FILE, 'utf8'))
+      const data = JSON.parse(readFileSync(POLICY_CACHE_FILE, "utf8"))
       return new Map(data)
     } catch (error) {
-      console.log('Failed to load cached policy, recomputing...')
+      console.log("Failed to load cached policy, recomputing...")
       return null
     }
   }
   return null
 }
 
-const savePolicyToCache = (policy: Map<string, { value: number; action: Action }>): void => {
+const savePolicyToCache = (
+  policy: Map<string, { value: number; action: Action }>,
+): void => {
   const data = Array.from(policy.entries())
   writeFileSync(POLICY_CACHE_FILE, JSON.stringify(data, null, 2))
   console.log(`Policy cached to ${POLICY_CACHE_FILE}`)
@@ -166,7 +171,7 @@ const valueIteration = (): Map<string, { value: number; action: Action }> => {
     return cachedPolicy
   }
 
-  console.log('Computing optimal strategy (multiset)...')
+  console.log("Computing optimal strategy (multiset)...")
   const allStates = generateAllMultisetStates()
   const totalStates = allStates.length // Should be 252
 
@@ -249,7 +254,7 @@ const valueIteration = (): Map<string, { value: number; action: Action }> => {
   process.stdout.write(
     `\rComputing optimal strategy (multiset), found ${totalStates} states - completed!\n`,
   )
-  
+
   // Save policy to cache
   savePolicyToCache(policy)
   return policy

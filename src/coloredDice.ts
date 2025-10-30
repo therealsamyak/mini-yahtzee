@@ -1,6 +1,6 @@
 import { NUM_DICE, NUM_REROLLS, calculateScore } from "./utils.js"
 import type { DiceState, Action } from "./utils.js"
-import { readFileSync, writeFileSync, existsSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync } from "fs"
 
 // Utility functions
 const generateRandomDice = (): DiceState =>
@@ -78,20 +78,25 @@ const calculateTransitionProbability = (
 // Policy cache management
 const POLICY_CACHE_FILE = `src/colored-dice-policy-${NUM_DICE}dice-${NUM_REROLLS}rerolls.json`
 
-const loadPolicyFromCache = (): Map<string, { value: number; action: Action }> | null => {
+const loadPolicyFromCache = (): Map<
+  string,
+  { value: number; action: Action }
+> | null => {
   if (existsSync(POLICY_CACHE_FILE)) {
     try {
-      const data = JSON.parse(readFileSync(POLICY_CACHE_FILE, 'utf8'))
+      const data = JSON.parse(readFileSync(POLICY_CACHE_FILE, "utf8"))
       return new Map(data)
     } catch (error) {
-      console.log('Failed to load cached policy, recomputing...')
+      console.log("Failed to load cached policy, recomputing...")
       return null
     }
   }
   return null
 }
 
-const savePolicyToCache = (policy: Map<string, { value: number; action: Action }>): void => {
+const savePolicyToCache = (
+  policy: Map<string, { value: number; action: Action }>,
+): void => {
   const data = Array.from(policy.entries())
   writeFileSync(POLICY_CACHE_FILE, JSON.stringify(data, null, 2))
   console.log(`Policy cached to ${POLICY_CACHE_FILE}`)
@@ -106,7 +111,7 @@ const valueIteration = (): Map<string, { value: number; action: Action }> => {
     return cachedPolicy
   }
 
-  console.log('Computing optimal strategy (colored dice)...')
+  console.log("Computing optimal strategy (colored dice)...")
   const allStates = generateAllStates()
   const allActions = generateAllActions()
   const totalStates = Math.pow(6, NUM_DICE) // 6^NUM_DICE = 6^5 = 7776
@@ -187,7 +192,7 @@ const valueIteration = (): Map<string, { value: number; action: Action }> => {
   process.stdout.write(
     `\rComputing optimal strategy (colored dice), found ${totalStates} states - completed!\n`,
   )
-  
+
   // Save policy to cache
   savePolicyToCache(policy)
   return policy
