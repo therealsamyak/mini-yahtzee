@@ -15,6 +15,7 @@
   },
   "scripts": {
     "format": "bunx prettier --write .",
-    "main": "bun run index.ts"
+    "main": "bun run index.ts",
+    "prepare": "bunx lefthook install"
   }
 }
