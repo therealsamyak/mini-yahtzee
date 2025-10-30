@@ -8,5 +8,12 @@
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "prettier": "^3.6.2"
+  },
+  "scripts": {
+    "format": "bunx prettier --write .",
+    "main": "bun run index.ts"
   }
 }
