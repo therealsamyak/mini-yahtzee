@@ -20,3 +20,20 @@ export const calculateMultisetScore = (multiset: MultisetState): number => {
   // For now, return a simple sum as placeholder
   return multiset.reduce((sum, count, index) => sum + count * (index + 1), 0)
 }
+
+// State space calculations
+export const calculateColoredDiceStateSpace = (): number => {
+  return Math.pow(6, NUM_DICE)
+}
+
+// Calculate multiset state space using stars and bars: C(6 + NUM_DICE - 1, NUM_DICE)
+export const calculateMultisetStateSpace = (): number => {
+  const n = 6 + NUM_DICE - 1
+  const k = NUM_DICE
+  // Calculate C(n, k) = n! / (k! * (n-k)!)
+  let result = 1
+  for (let i = 0; i < k; i++) {
+    result = (result * (n - i)) / (i + 1)
+  }
+  return result
+}

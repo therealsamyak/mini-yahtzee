@@ -1,4 +1,10 @@
-import { NUM_DICE, NUM_REROLLS, calculateMultisetScore } from "./utils.js"
+import {
+  NUM_DICE,
+  NUM_REROLLS,
+  calculateMultisetScore,
+  calculateColoredDiceStateSpace,
+  calculateMultisetStateSpace,
+} from "./utils.js"
 import type { MultisetState } from "./utils.js"
 import { readFileSync, writeFileSync, existsSync } from "fs"
 
@@ -279,10 +285,15 @@ const diceArrayToMultiset = (dice: number[]): MultisetState => {
 
 // Main game simulation
 export const simulateGame = (): void => {
+  const multisetStateSpace = calculateMultisetStateSpace()
+  const coloredDiceStateSpace = calculateColoredDiceStateSpace()
+
   console.log(`=== Yahtzee Game Simulation (Multiset) ===`)
   console.log(`Number of dice: ${NUM_DICE}`)
   console.log(`Number of rerolls: ${NUM_REROLLS}`)
-  console.log(`State space: 252 states (vs 7,776 for colored dice)`)
+  console.log(
+    `State space: ${multisetStateSpace} states (vs ${coloredDiceStateSpace} for colored dice)`,
+  )
   console.log()
 
   // Generate random starting position

@@ -1,4 +1,10 @@
-import { NUM_DICE, NUM_REROLLS, calculateScore } from "./utils.js"
+import {
+  NUM_DICE,
+  NUM_REROLLS,
+  calculateScore,
+  calculateColoredDiceStateSpace,
+  calculateMultisetStateSpace,
+} from "./utils.js"
 import type { DiceState, Action } from "./utils.js"
 import { readFileSync, writeFileSync, existsSync } from "fs"
 
@@ -200,10 +206,15 @@ const valueIteration = (): Map<string, { value: number; action: Action }> => {
 
 // Main game simulation
 export const simulateGame = (): void => {
+  const coloredDiceStateSpace = calculateColoredDiceStateSpace()
+  const multisetStateSpace = calculateMultisetStateSpace()
+
   console.log(`=== Yahtzee Game Simulation (Colored Dice) ===`)
   console.log(`Number of dice: ${NUM_DICE}`)
   console.log(`Number of rerolls: ${NUM_REROLLS}`)
-  console.log(`State space: ${Math.pow(6, NUM_DICE)} states`)
+  console.log(
+    `State space: ${coloredDiceStateSpace} states (vs ${multisetStateSpace} for multiset)`,
+  )
   console.log()
 
   // Generate random starting position
